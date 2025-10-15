@@ -1,61 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ⚡ WEBSITE BÁN ĐỒ ĐIỆN – ĐIỆN TỬ
 
+Dự án xây dựng website thương mại điện tử chuyên bán **đồ điện – điện tử**, phát triển bằng **Laravel**, **MySQL**, **Bootstrap**.
+
+---
+
+## 🗂️ CẤU TRÚC DỰ ÁN
+
+```
+project/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   └── Middleware/
+│   ├── Models/
+│   └── Providers/
+├── resources/
+│   ├── views/         # Giao diện Blade
+│   ├── css/
+│   └── js/
+├── routes/
+│   └── web.php
+├── public/
+│   ├── images/
+│   └── uploads/
+└── database/
+    └── migrations/
+```
+
+---
+
+## ⚙️ CÀI ĐẶT VÀ CHẠY DỰ ÁN
+
+### ✅ Bước 1: Clone dự án
+
+```bash
+git clone https://github.com/Duy4104/ktpm.git
+cd ktpm
+```
+
+### ✅ Bước 2: Cài đặt dependencies
+
+```bash
+composer install
+npm install && npm run dev
+```
+
+### ✅ Bước 3: Cấu hình môi trường
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Mở file `.env` và cấu hình thông tin kết nối MySQL:
+
+```env
+DB_DATABASE=k2
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### ✅ Bước 4: Tạo cơ sở dữ liệu và seed dữ liệu mẫu
+
+```bash
+php artisan migrate --seed
+```
+
+### ✅ Bước 5: Chạy server
+
+```bash
+php artisan serve
+```
+
+> Truy cập tại: [http://localhost:8000](http://localhost:8000)
+
+---
+
+## 🖼️ GIAO DIỆN 
+
+### Trang chủ
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="./public/images/home.png" alt="Trang chủ" width="600"/>
 </p>
 
-## About Laravel
+### Trang sản phẩm
+<p align="center">
+  <img src="./public/images/product.png" alt="Chi tiết sản phẩm" width="600"/>
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Trang quản trị
+<p align="center">
+  <img src="./public/images/admin.png" alt="Giao diện Admin" width="600"/>
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+## 👨‍💻 NHÓM PHÁT TRIỂN
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Họ và tên | MSV|
+|------------|----------|
+| **Trần Văn Duy** | 23015552 |
+| **Hoàng Mạnh Dũng** | 23014015|
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📄 GIẤY PHÉP & MỤC ĐÍCH
 
-## Laravel Sponsors
+Dự án được xây dựng phục vụ **môn học Kỹ nghệ phần mềm**,  
+nhằm mục đích học tập và nghiên cứu,
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
+---
 
-### Premium Partners
+## 🧩 UML TỔNG QUÁT
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Sơ đồ UML tổng quát mô tả cấu trúc chính của hệ thống website bán đồ điện - điện tử, bao gồm các thành phần như **User**, **Product**, **Review**, **Order**, và **Feedback**, cùng các mối quan hệ giữa chúng.
 
-## Contributing
+<p align="center">
+  <img src="./public/images/uml/tongquat.png" alt="UML tổng quát hệ thống" width="700"/>
+</p>
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
+## 📬 LIÊN HỆ
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Email:** 23015552@st.phenikaa-uni.edu.vn  
+- **GitHub:** [github.com/Duy4104](https://github.com/duy4104)
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<p align="center">
+  💡 *Cảm ơn bạn đã quan tâm đến dự án!*
+</p>
