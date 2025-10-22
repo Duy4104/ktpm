@@ -17,7 +17,7 @@
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link text-white">
-                        <i class="bi bi-speedometer2 me-2"></i> Bảng điều khuyển
+                        <i class="bi bi-speedometer2 me-2"></i> Bảng điều khiển
                     </a>
                 </li>
                 <li>
@@ -40,6 +40,7 @@
                         <i class="bi bi-chat-dots me-2"></i> Phản Hồi
                     </a>
                 </li>
+            
             </ul>
         </div>
         

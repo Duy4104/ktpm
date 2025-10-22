@@ -27,12 +27,10 @@ use App\Http\Controllers\ReviewController;
 |
 */
 Route::middleware('auth')->group(function () {
-    // Hiển thị trang checkout
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-
-    // Xử lý khi bấm thanh toán
-    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
 });
+
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');

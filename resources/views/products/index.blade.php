@@ -3,20 +3,62 @@
 @section('content')
 <div class="container py-5">
     <h1 class="mb-4 text-center">Danh sách sản phẩm</h1>
-    <form action="{{ route('products.index') }}" method="GET">
-        <div class="input-group mb-3">
-            <input type="text" 
-                name="search" 
-                class="form-control" 
-                placeholder="Tìm kiếm..." 
-                value="{{ request('search') }}">
-            <div class="input-group-append">
-                <button class="btn btn" type="submit" title="Tìm kiếm">
-                    <i class="fas fa-search"></i>
-                </button>
+    <form action="{{ route('products.index') }}" method="GET" class="mb-4">
+        <div class="row g-2 align-items-end">
+            <!-- Ô tìm kiếm -->
+            <div class="col-md-4">
+                <label for="search" class="form-label fw-bold">Tìm kiếm</label>
+                <input type="text" 
+                    name="search" 
+                    id="search"
+                    class="form-control" 
+                    placeholder="Nhập tên sản phẩm..." 
+                    value="{{ request('search') }}">
+            </div>
+
+            <!-- Lọc theo danh mục -->
+            <div class="col-md-3">
+                <label for="category" class="form-label fw-bold">Danh mục</label>
+                <select name="category" id="category" class="form-select">
+                    <option value="">Tất cả</option>
+                    @foreach($categories as $cat)
+                        <option value="{{ $cat->id }}" 
+                            {{ request('category') == $cat->id ? 'selected' : '' }}>
+                            {{ $cat->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Lọc theo giá -->
+            <div class="col-md-3">
+                <label for="price_range" class="form-label fw-bold">Khoảng giá</label>
+                <select name="price_range" id="price_range" class="form-select">
+                    <option value="">Tất cả</option>
+                    <option value="1" {{ request('price_range') == '1' ? 'selected' : '' }}>Dưới 5.000.000đ</option>
+                    <option value="2" {{ request('price_range') == '2' ? 'selected' : '' }}>5.000.000đ - 10.000.000đ</option>
+                    <option value="3" {{ request('price_range') == '3' ? 'selected' : '' }}>Trên 10.000.000đ</option>
+                </select>
+            </div>
+
+            <!-- Lọc theo tình trạng -->
+            <div class="col-md-2">
+                <label for="stock" class="form-label fw-bold">Tình trạng</label>
+                <select name="stock" id="stock" class="form-select">
+                    <option value="">Tất cả</option>
+                    <option value="in" {{ request('stock') == 'in' ? 'selected' : '' }}>Còn hàng</option>
+                    <option value="out" {{ request('stock') == 'out' ? 'selected' : '' }}>Hết hàng</option>
+                </select>
+            </div>
+
+            <!-- Nút tìm -->
+            <div class="col-md-12 mt-2 text-end">
+                <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Lọc</button>
+                <a href="{{ route('products.index') }}" class="btn btn-secondary">Làm mới</a>
             </div>
         </div>
     </form>
+
     
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @foreach($products as $product)

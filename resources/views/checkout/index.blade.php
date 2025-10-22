@@ -43,8 +43,31 @@
 
         <form action="{{ route('checkout.process') }}" method="POST">
             @csrf
-            <button type="submit" class="btn btn-success">Thanh toán</button>
+
+            <div class="mb-3">
+                <label>Họ tên:</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label>Số điện thoại:</label>
+                <input type="text" name="phone" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label>Email:</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label>Địa chỉ:</label>
+                <input type="text" name="address" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Thanh toán</button>
         </form>
+
+
     @endif
 </div>
 @endsection

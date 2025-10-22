@@ -4,58 +4,76 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
-use App\Models\Product;
+use App\Models\OrderItem;
+use App\Models\Product; // ✅ Thêm dòng này để có thể truy cập Product model
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
+    // Hiển thị form thanh toán
     public function index()
     {
-        $cartItems = session()->get('cart', []);
-        $total = collect($cartItems)->sum(fn($item) => $item['price'] * $item['quantity']);
-        return view('checkout.index', compact('cartItems', 'total'));
+        $cart = session()->get('cart', []);
+        return view('checkout.index', compact('cart'));
     }
 
+    // Xử lý thanh toán
     public function process(Request $request)
     {
+        // ✅ Bước 1: Lấy giỏ hàng từ session
         $cart = session()->get('cart', []);
         if (empty($cart)) {
-            return redirect()->back()->with('error', 'Giỏ hàng trống.');
+            return back()->with('error', 'Giỏ hàng đang trống!');
         }
 
-        $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+        // ✅ Bước 2: Validate dữ liệu người mua
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email',
+            'address' => 'required|string|max:255',
+        ]);
 
-        try {
-            DB::transaction(function () use ($cart, $total) {
-                $order = Order::create([
-                    'user_id' => Auth::id(),
-                    'total' => $total,
-                    'status' => 'pending',
-                ]);
+        // ✅ Bước 3: Tính tổng tiền
+        $total = collect($cart)->sum(function ($item) {
+            return $item['price'] * $item['quantity'];
+        });
 
-                foreach ($cart as $productId => $item) {
-                    $product = Product::findOrFail($productId);
+        // ✅ Bước 4: Tạo đơn hàng
+        $order = Order::create([
+            'user_id' => Auth::id(),
+            'total' => $total,
+            'status' => 'pending',
+            'customer_name' => $validated['name'],
+            'customer_phone' => $validated['phone'],
+            'customer_email' => $validated['email'],
+            'customer_address' => $validated['address'],
+        ]);
 
-                    if ($product->stock < $item['quantity']) {
-                        throw new \Exception("Sản phẩm {$product->name} không đủ số lượng.");
-                    }
+        // ✅ Bước 5: Lưu từng sản phẩm trong đơn và cập nhật tồn kho
+        foreach ($cart as $productId => $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $productId,
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
 
-                    $order->orderItems()->create([
-                        'product_id' => $productId,
-                        'quantity' => $item['quantity'],
-                        'price' => $item['price'],
-                    ]);
-
-                    $product->decrement('stock', $item['quantity']);
+            // ✅ Giảm số lượng tồn kho
+            $product = Product::find($productId);
+            if ($product) {
+                $product->stock -= $item['quantity'];
+                if ($product->stock < 0) {
+                    $product->stock = 0; // Tránh bị âm
                 }
-            });
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+                $product->save();
+            }
         }
 
+        // ✅ Bước 6: Xóa giỏ hàng sau khi thanh toán
         session()->forget('cart');
-        return redirect()->route('user.orders.index')->with('success', 'Đặt hàng thành công!');
+
+        // ✅ Bước 7: Chuyển hướng và thông báo thành công
+        return redirect()->route('home')->with('success', 'Đặt hàng thành công!');
     }
 }
-?>

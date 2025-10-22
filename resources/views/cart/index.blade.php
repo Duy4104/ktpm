@@ -61,7 +61,11 @@
                 <button type="submit" class="btn btn-danger">Xóa toàn bộ giỏ hàng</button>
             </form>
 
-            <form action="{{ route('checkout.process') }}" method="POST">
+            <form action="{{ route('products.index') }}" method="GET">
+                @csrf
+                <button type="submit" class="btn btn-success">Tiếp tục mua hàng</button>
+            </form>
+            <form action="{{ route('checkout.index') }}" method="GET">
                 @csrf
                 <button type="submit" class="btn btn-success">Thanh toán</button>
             </form>

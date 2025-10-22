@@ -4,29 +4,55 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
     /**
      * Hiển thị danh sách sản phẩm (có phân trang)
      */
-    public function index(Request $request) // Thêm Request làm tham số
+    public function index(Request $request)
     {
-        // Lấy giá trị tìm kiếm từ URL
         $search = $request->input('search');
-        
-        // Sửa đoạn truy vấn hiện tại của bạn
-        $products = Product::query() // Bắt đầu bằng query()
-            ->when($search, function ($query, $search) {
-                return $query->where('name', 'LIKE', "%{$search}%")
-                            ->orWhere('description', 'LIKE', "%{$search}%");
-            })
-            // GIỮ NGUYÊN CÁC ĐIỀU KIỆN HIỆN TẠI CỦA BẠN
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
+        $category = $request->input('category');
+        $price_range = $request->input('price_range');
+        $stock = $request->input('stock');
 
-        return view('products.index', compact('products'));
+        $products = Product::query()
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('description', 'LIKE', "%{$search}%");
+            })
+            ->when($category, function ($query, $category) {
+                $query->where('category_id', $category);
+            })
+            ->when($price_range, function ($query, $price_range) {
+                switch ($price_range) {
+                    case '1':
+                        $query->where('price', '<', 5000000);
+                        break;
+                    case '2':
+                        $query->whereBetween('price', [5000000, 10000000]);
+                        break;
+                    case '3':
+                        $query->where('price', '>', 10000000);
+                        break;
+                }
+            })
+            ->when($stock, function ($query, $stock) {
+                if ($stock === 'in') $query->where('stock', '>', 0);
+                elseif ($stock === 'out') $query->where('stock', 0);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(12)
+            ->appends($request->all());
+
+        // Lấy danh mục cho dropdown
+        $categories = Category::all(); // <-- đây là phần bị thiếu trước đó
+
+        return view('products.index', compact('products', 'categories')); // <-- truyền sang view
     }
+
 
     public function store(Request $request)
     {

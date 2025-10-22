@@ -4,20 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\OrderItem;
 
-// App\Models\Order
 class Order extends Model
 {
-    // ... các phần trước
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
         'total',
         'status',
+        'customer_name',
+        'customer_phone',
+        'customer_email',
+        'customer_address',
     ];
+
     public $timestamps = true;
 
+    // ✅ Hiển thị trạng thái thân thiện
     public function getStatusTextAttribute()
     {
         return [
@@ -25,10 +32,11 @@ class Order extends Model
             'processing' => 'Đang xử lý',
             'shipped' => 'Đang giao hàng',
             'completed' => 'Hoàn thành',
-            'cancelled' => 'Đã hủy'
+            'cancelled' => 'Đã hủy',
         ][$this->status] ?? $this->status;
     }
 
+    // ✅ Màu trạng thái
     public function getStatusColorAttribute()
     {
         return [
@@ -36,17 +44,20 @@ class Order extends Model
             'processing' => 'info',
             'shipped' => 'primary',
             'completed' => 'success',
-            'cancelled' => 'danger'
+            'cancelled' => 'danger',
         ][$this->status] ?? 'secondary';
     }
-    
+
+    // ✅ Một order có nhiều item
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
-    public function user()
+
+
+    // ✅ Một order thuộc về 1 user
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 }
-?>

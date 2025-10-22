@@ -17,7 +17,7 @@ class HomeController extends Controller
         $featuredProducts = Product::latest()->take(8)->get();
         
         // Lấy feedback mới nhất (có thể kèm thông tin người dùng)
-        $recentFeedbacks = Feedback::with('user')->latest()->take(5)->get();
+        $recentFeedbacks = Feedback::with('user')->latest()->take(6)->get();
 
         return view('home', [
             'featuredProducts' => $featuredProducts,

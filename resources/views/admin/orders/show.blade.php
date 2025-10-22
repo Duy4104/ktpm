@@ -7,8 +7,10 @@
     <div class="card mb-4">
         <div class="card-body">
             <h5>Thông tin khách hàng</h5>
-            <p><strong>Tên:</strong> {{ $order->user->name }}</p>
-            <p><strong>Email:</strong> {{ $order->user->email }}</p>
+            <p><strong>Họ tên:</strong> {{ $order->customer_name }}</p>
+            <p><strong>Số điện thoại:</strong> {{ $order->customer_phone }}</p>
+            <p><strong>Email:</strong> {{ $order->customer_email }}</p>
+            <p><strong>Địa chỉ:</strong> {{ $order->customer_address }}</p>
         </div>
     </div>
     
